@@ -3,6 +3,7 @@ import fs from 'fs';
 import multer from 'multer';
 
 import { saveModel } from '../repositories/firebase_repo';
+import { removeDir } from '../helpers/fsHelpers';
 
 let router:Router = express.Router();
 
@@ -45,6 +46,9 @@ router.post('/', upload.single("file"), (req: Request, res: Response) => {
             res.send({
                 err : err
             })
+        })
+        .finally(() => {
+            removeDir(req.file.destination);
         })
 
 });
