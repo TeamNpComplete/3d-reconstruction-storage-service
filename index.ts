@@ -1,11 +1,21 @@
 import express, { Application } from "express";
 import path from "path";
 import dotenv from 'dotenv';
+import admin from 'firebase-admin';
 
-dotenv.config()
-const app: Application = express()
+dotenv.config();
+const app: Application = express();
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
+
+const serviceAccountPath = process.env.SERVICE_ACCOUNT_PATH || './db-credentials/serviceAccountKey.json';
+const serviceAccount = require(serviceAccountPath);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: process.env.FIREBASE_REALTIME_DATABASE_URL,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET_URL
+});
 
 app.use(express.json())
 app.use(express.urlencoded({extended : true}));
