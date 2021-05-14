@@ -18,3 +18,22 @@ export function saveModel(file: string) {
             });
     })
 }
+
+export function getModel(modelId : string) {
+    return new Promise((resolve, reject) => {
+        let modelData: any[] = [];
+
+        storageBucket.file(`models/${modelId}.stl`).createReadStream()
+            .on('data', (chunk) => {
+                modelData.push(chunk)
+            })
+            .on('error', (err) => {
+                reject(err);
+            })
+            .on('end', () => {
+                let buffer = Buffer.concat(modelData);
+                resolve(buffer.toString());
+            })
+        
+    });
+}
