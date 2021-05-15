@@ -1,23 +1,61 @@
 import express, { Router, Request, Response } from 'express';
-import { getModel } from '../repositories/firebase_storage_repo';
+import { deleteModel, getModelId } from '../repositories/firebase_rltdb_repo';
+import { deleteModelFile, getModel } from '../repositories/firebase_storage_repo';
 
 let router:Router = express.Router();
 
 router.get('/', (req : Request, res : Response) => {
-    let { modelId } = req.query;
+    let { userId, modelName } = req.query;
 
-    if(typeof(modelId) === 'string') {
-        getModel(modelId)
-            .then((data) => {
-                res.setHeader('Content-Type', 'model/stl')
-                res.send(data);
+    if(typeof(userId) === 'string' && typeof(modelName) === 'string') {
+        getModelId(userId, modelName)
+            .then((modelId) => {
+                getModel(modelId)
+                    .then((data) => {
+                        res.setHeader('Content-Type', 'model/stl')
+                        res.send(data);
+                    })
+                    .catch((err) => {
+                        res.send({
+                            err : err
+                        })
+                    })
             })
             .catch((err) => {
                 res.send({
                     err : err
                 })
             })
+        
     }
 });
+
+router.delete('/', (req : Request, res : Response) => {
+    let { userId, modelName } = req.query;
+
+    if(typeof(userId) === 'string' && typeof(modelName) == 'string') {
+        deleteModel(userId, modelName)
+            .then((modelId) => {
+                deleteModelFile(modelId)
+                    .then(() => {
+                        res.send({
+                            result : 'success'
+                        })
+                    })
+                    .catch((err) => {
+                        res.send({
+                            err : err
+                        })
+                    })
+            })
+            .catch((err) => {
+                res.send({
+                    err : err
+                })
+            })
+    } else {
+
+    }
+})
 
 module.exports = router;

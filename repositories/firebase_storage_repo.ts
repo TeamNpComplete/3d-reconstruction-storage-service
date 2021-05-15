@@ -37,3 +37,15 @@ export function getModel(modelId : string) {
         
     });
 }
+
+export function deleteModelFile(modelId : string) {
+    return new Promise((resolve, reject) => {
+        storageBucket.file(`models/${modelId}.stl`).delete()
+            .then((res) => {
+                resolve(null);
+            })
+            .catch((err) => {
+                reject(err);
+            })
+    });
+}
