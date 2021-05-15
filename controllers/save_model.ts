@@ -31,16 +31,13 @@ let storage = multer.diskStorage({
 let upload = multer({storage: storage});
 
 router.post('/', upload.single("file"), (req: Request, res: Response) => {
-    console.log('Request recieved !');
-    console.log(req.file);
-
     const { userId, modelName } = req.body
+
     saveModel(req.file.path)
         .then((model) => {
             model.modelName = modelName;
             saveModelPath(userId, modelName, model)
                 .then(() => {
-                    console.log('Upload successfull. id : ' + model.modelId)
                     res.send({
                         modelName : model.modelName,
                         size : model.size,
@@ -48,14 +45,12 @@ router.post('/', upload.single("file"), (req: Request, res: Response) => {
                     })
                 })
                 .catch((err) => {
-                    console.log('Failed to save model name !')
                     res.send({
                         err : err
                     })
                 });
         })
         .catch((err) => {
-            console.log('Failed to upload !')
             res.send({
                 err : err
             })

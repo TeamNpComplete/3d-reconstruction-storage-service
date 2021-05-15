@@ -58,7 +58,9 @@ router.delete('/', (req : Request, res : Response) => {
                 })
             })
     } else {
-
+        res.send({
+            err :  new Error('Invalid Query Paramaters !')
+        })
     }
 })
 

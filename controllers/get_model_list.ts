@@ -10,7 +10,7 @@ router.get('/', (req : Request, res : Response) => {
     if(typeof(userId) === 'string') {
         getModelList(userId)
             .then((modelList : Model[]) => {
-                let list: { modelName: string; size: number | undefined; dateCreated: string | undefined; }[] = []
+                let list: { modelName: string, size: number, dateCreated: string }[] = []
                 modelList.forEach((model) => {
                     list.push({
                         modelName : model.modelName,
@@ -23,7 +23,6 @@ router.get('/', (req : Request, res : Response) => {
                 })
             })
             .catch((err) => {
-                console.log('Failed to get model list for given user !')
                 res.send({
                     err : err
                 })
@@ -33,7 +32,6 @@ router.get('/', (req : Request, res : Response) => {
             err : new Error('Invalid userId')
         });
     }
-        
 });
 
 module.exports = router;

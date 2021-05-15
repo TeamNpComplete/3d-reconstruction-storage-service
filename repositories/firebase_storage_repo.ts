@@ -42,7 +42,6 @@ export function getModel(modelId : string) {
                 let buffer = Buffer.concat(modelData);
                 resolve(buffer.toString());
             })
-        
     });
 }
 

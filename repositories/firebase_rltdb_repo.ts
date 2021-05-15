@@ -3,7 +3,6 @@ import { Model } from '../models/Model';
 
 const databaseRef = admin.database().ref();
 
-
 export function getModelId(userId: string, modelName : string) {
     return new Promise((resolve : (modelId: string) => void, reject : (err : Error) => void) => {
         databaseRef.child(`user_model/${userId}/${modelName}`).get()
