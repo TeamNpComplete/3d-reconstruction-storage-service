@@ -10,8 +10,16 @@ router.get('/', (req : Request, res : Response) => {
     if(typeof(userId) === 'string') {
         getModelList(userId)
             .then((modelList : Model[]) => {
+                let list: { modelName: string; size: number | undefined; dateCreated: string | undefined; }[] = []
+                modelList.forEach((model) => {
+                    list.push({
+                        modelName : model.modelName,
+                        size : model.size,
+                        dateCreated : model.dateCreated
+                    })
+                })
                 res.send({
-                    modelList : modelList
+                    modelList : list
                 })
             })
             .catch((err) => {

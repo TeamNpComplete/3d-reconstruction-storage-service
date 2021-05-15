@@ -36,13 +36,15 @@ router.post('/', upload.single("file"), (req: Request, res: Response) => {
 
     const { userId, modelName } = req.body
     saveModel(req.file.path)
-        .then((modelId) => {
-
-            saveModelPath(userId, modelName, modelId)
+        .then((model) => {
+            model.modelName = modelName;
+            saveModelPath(userId, modelName, model)
                 .then(() => {
-                    console.log('Upload successfull. id : ' + modelId)
+                    console.log('Upload successfull. id : ' + model.modelId)
                     res.send({
-                        modelId : modelId
+                        modelName : model.modelName,
+                        size : model.size,
+                        dateCreated : model.dateCreated
                     })
                 })
                 .catch((err) => {

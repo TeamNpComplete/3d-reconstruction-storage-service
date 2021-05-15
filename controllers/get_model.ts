@@ -27,6 +27,10 @@ router.get('/', (req : Request, res : Response) => {
                 })
             })
         
+    } else {
+        res.send({
+            err : new Error('Invalid Query Paramaters !')
+        })
     }
 });
 
@@ -35,8 +39,8 @@ router.delete('/', (req : Request, res : Response) => {
 
     if(typeof(userId) === 'string' && typeof(modelName) == 'string') {
         deleteModel(userId, modelName)
-            .then((modelId) => {
-                deleteModelFile(modelId)
+            .then((model) => {
+                deleteModelFile(model.modelId)
                     .then(() => {
                         res.send({
                             result : 'success'

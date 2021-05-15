@@ -9,7 +9,7 @@ export function getModelId(userId: string, modelName : string) {
         databaseRef.child(`user_model/${userId}/${modelName}`).get()
             .then((value) => {
                 if(value !== null) {
-                    resolve(value.val());
+                    resolve(value.child('modelId').val());
                 } else {
                     reject(new Error('Model with given name not found'));
                 }
@@ -29,7 +29,9 @@ export function getModelList(userId: string) {
                     if(model.key !== null)
                         modelList.push({
                             modelName: model.key,
-                            modelId : model.val()
+                            modelId : model.child('modelId').val(),
+                            size : model.child('size').val(),
+                            dateCreated : model.child('dateCreated').val()
                         })
                 })
                 resolve(modelList);
@@ -40,9 +42,9 @@ export function getModelList(userId: string) {
     })
 }
 
-export function saveModelPath(userId: string, modelName: string, modelId: string) {
+export function saveModelPath(userId: string, modelName: string, model: Model) {
     return new Promise((resolve, reject) => {
-        databaseRef.child(`user_model/${userId}/${modelName}`).set(modelId)
+        databaseRef.child(`user_model/${userId}/${modelName}`).set(model)
             .then(() => {
                 resolve(null);
             })
@@ -53,16 +55,16 @@ export function saveModelPath(userId: string, modelName: string, modelId: string
 }
 
 export function deleteModel(userId: string, modelName: string) {
-    return new Promise((resolve : (modelId: string) => void, reject : (err : Error) => void) => {
+    return new Promise((resolve : (model: Model) => void, reject : (err : Error) => void) => {
         databaseRef.child(`user_model/${userId}/${modelName}`).get()
             .then((data) => {
-                let modelId = data.val();
-                if(modelId !== null) {
+                let model = data.val();
+                if(model !== null) {
                     databaseRef.child(`user_model/${userId}/${modelName}`).remove((err) => {
                         if(err) {
                             reject(err);
                         } else {    
-                            resolve(modelId);
+                            resolve(model);
                         }
                     })
                 } else {
