@@ -40,7 +40,7 @@ export function getModel(modelId : string) {
             })
             .on('end', () => {
                 let buffer = Buffer.concat(modelData);
-                resolve(buffer.toString());
+                resolve(buffer);
             })
     });
 }
