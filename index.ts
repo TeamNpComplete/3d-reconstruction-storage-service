@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import path from "path";
 import dotenv from 'dotenv';
 import admin from 'firebase-admin';
+import { authenticateToken } from "./middelwares/authentication";
 
 dotenv.config();
 const app: Application = express();
@@ -25,11 +26,14 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, DELETE");
     next();
-  });
+  }
+);
+
+app.use(authenticateToken);
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
-app.use('/api', require('./controllers'));
+app.use('/', require('./controllers'));
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT} ...`);

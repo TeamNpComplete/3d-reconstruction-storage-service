@@ -5,7 +5,7 @@ import { getModelList } from '../repositories/firebase_rltdb_repo';
 let router:Router = express.Router();
 
 router.get('/', (req : Request, res : Response) => {
-    let { userId } = req.query;
+    let { userId } = req;
 
     if(typeof(userId) === 'string') {
         getModelList(userId)
@@ -23,6 +23,7 @@ router.get('/', (req : Request, res : Response) => {
                 })
             })
             .catch((err) => {
+                console.log('Hello');
                 res.send({
                     err : err
                 })

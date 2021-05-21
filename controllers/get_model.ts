@@ -5,7 +5,8 @@ import { deleteModelFile, getModel } from '../repositories/firebase_storage_repo
 let router:Router = express.Router();
 
 router.get('/', (req : Request, res : Response) => {
-    let { userId, modelName } = req.query;
+    let { userId } = req;
+    let { modelName } = req.query;
 
     if(typeof(userId) === 'string' && typeof(modelName) === 'string') {
         getModelId(userId, modelName)
@@ -35,7 +36,8 @@ router.get('/', (req : Request, res : Response) => {
 });
 
 router.delete('/', (req : Request, res : Response) => {
-    let { userId, modelName } = req.query;
+    let { userId } = req;
+    let { modelName } = req.query;
 
     if(typeof(userId) === 'string' && typeof(modelName) == 'string') {
         deleteModel(userId, modelName)

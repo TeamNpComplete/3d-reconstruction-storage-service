@@ -31,12 +31,13 @@ let storage = multer.diskStorage({
 let upload = multer({storage: storage});
 
 router.post('/', upload.single("file"), (req: Request, res: Response) => {
-    const { userId, modelName } = req.body
+    const { userId } = req;
+    const { modelName } = req.body
 
     saveModel(req.file.path)
         .then((model) => {
             model.modelName = modelName;
-            saveModelPath(userId, modelName, model)
+            saveModelPath(userId as string, modelName, model)
                 .then(() => {
                     res.send({
                         modelName : model.modelName,
